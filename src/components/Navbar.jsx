@@ -30,7 +30,7 @@ display: flex;
 flex-direction: row;
 align-items: center;
 justify-content: space-evenly;
-flex: 2;
+flex: 1;
 `;
 const Right = styled.div`
 display: flex;
@@ -65,7 +65,7 @@ flex:1 ;
 `;
 const Logo = styled.h1`
 font-weight: 900;
-font-size: 2.5em;
+display: flex;
 `;
 
 
@@ -80,6 +80,7 @@ height: 200%;
 color: black;
 filter: brightness(0);
 cursor: pointer;
+justify-content: center;
 `;
 
 const MenuItem = styled.div`
@@ -95,16 +96,18 @@ const Navbar = () => {
       <Container>
           <Wrapper>
               <Left>
-                  <Dropdown/>
+                  <Dropdown>
                   <MenuIcon/>
+                  </Dropdown>
                   <ClickLogo>
                     <img src={logo} className="Logo" alt="logo"/>
                   </ClickLogo>
-              </Left>
-              <Center>
-              <LogoSpash>
+
+                  <LogoSpash>
                     <Logo >Pink Fluffy Unicorns.</Logo>
                   </LogoSpash>
+              </Left>
+              <Center>
                  <SearchContainer>
                     <Input/>
                     <SearchIcon style ={{color:"gray",fontSize:"32px"}}/>
