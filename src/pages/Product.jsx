@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import Comments from "../components/Comments";
 
 const Container = styled.div``;
 
@@ -152,6 +153,7 @@ const Product = () => {
                         </AmountContainer>
                         <Button>ADD TO CART</Button>
                     </AddContainer>
+                    <Comments/>
                 </InfoContainer>
             </Wrapper>
             <Footer />
