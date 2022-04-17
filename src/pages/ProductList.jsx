@@ -53,12 +53,12 @@ const ProductList = () => {
         <Container>
             <Navbar />
             <Announcement />
-            <Title> Dresses </Title>
+            <Title> {cat} </Title>
             <FilterContainer>
                 <Filter>
                     <FilterText> Filter Products: </FilterText>
                     <Select name="produce" onChange={handleFilters}>
-                        <Option>Vegetables</Option>
+                        <Option>DAIRY</Option>
                         <Option>Deli</Option>
                         <Option>Bread</Option>
                         <Option>Fish</Option>
