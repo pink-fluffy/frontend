@@ -9,6 +9,7 @@ import { publicRequest } from "../requestMethods";
 import axios from "axios";
 import { addProduct } from "../redux/cartRedux";
 import { useDispatch } from "react-redux"
+import Comments from "../components/Comments";
 
 const Container = styled.div``;
 
@@ -170,6 +171,7 @@ const Product = () => {
                         </AmountContainer>
                         <Button onClick={handleClick}>ADD TO CART</Button>
                     </AddContainer>
+                    <Comments/>
                 </InfoContainer>
             </Wrapper>
             <Footer />
