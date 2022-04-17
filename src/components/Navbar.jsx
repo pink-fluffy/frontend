@@ -1,63 +1,95 @@
-import { Badge } from "@material-ui/core";
-import { Search, ShoppingCartOutlined } from "@material-ui/icons";
-import React from "react";
+import React from 'react'
+import styled from 'styled-components'
+import MenuIcon from '@mui/icons-material/Menu';
+import SearchIcon from '@mui/icons-material/Search';
+import { Badge } from '@mui/material';
+import MailIcon from '@mui/icons-material/Mail';
+import { ShoppingCartOutlined } from '@mui/icons-material';
+import logo from '../logo.svg';
 import { useSelector } from "react-redux";
-import styled from "styled-components";
 
 const Container = styled.div`
-  height: 60px;
-`;
-
+    height: 60px;
+    font-family: "Quicksand", sans-serif;
+    display: flex;
+`
 const Wrapper = styled.div`
-  padding: 10px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+padding: 10px 20px;
+display: flex;
+justify-content: space-between;
+width:100%;
 `;
-
 const Left = styled.div`
-  flex: 1;
-  display: flex;
-  align-items: center;
+flex:2;
+display: flex;
+align-items: center;
+justify-content: flex-start;
+flex-direction: row;
 `;
-
-const Language = styled.span`
-  font-size: 14px;
-  cursor: pointer;
-`;
-
-const SearchContainer = styled.div`
-  border: 0.5px solid lightgray;
-  display: flex;
-  align-items: center;
-  margin-left: 25px;
-  padding: 5px;
-`;
-
-const Input = styled.input`
-  border: none;
-`;
-
 const Center = styled.div`
-  flex: 1;
-  text-align: center;
-`;
-
-const Logo = styled.h1`
-  font-weight: bold;
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: space-evenly;
+flex: 1;
 `;
 const Right = styled.div`
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+display: flex;
+align-items: center;
+justify-content: flex-end;
+flex-direction: row;
+flex:1 ;
+`;
+const Language = styled.div`
+flex:1 ;
+`;
+const SearchContainer = styled.div`
+display: flex;
+border-radius: 25px;
+border: 1px solid lightgray;
+align-items: right;
+justify-content: space-between;
+padding:0 10px 0px 0;
+margin-left: 25px;
+flex: 1 ;
+`;
+const Input = styled.input`
+border: none;
+border-radius: 25px;
+width: 100%;
+text-align: center;
+`;
+
+const LogoSpash = styled.div`
+display: flex;
+flex:1 ;
+`;
+const Logo = styled.h1`
+font-weight: 900;
+display: flex;
+`;
+
+
+const Dropdown = styled.div`
+cursor: pointer;
+padding: 10px 35px 10px 35px;
+`;
+const ClickLogo = styled.div`
+display: flex;
+flex:1 ;
+height: 200%;
+color: black;
+filter: brightness(0);
+cursor: pointer;
+justify-content: center;
 `;
 
 const MenuItem = styled.div`
-  font-size: 14px;
-  cursor: pointer;
-  margin-left: 25px;
+font-size: 14px;
+cursor: pointer;
+margin-left: 25px;
 `;
+
 
 
 
@@ -67,27 +99,40 @@ const Navbar = () => {
     console.log(quantity)
     return (
         <Container>
-            <Wrapper>
-                <Left>
-                    <Language>EN</Language>
-                    <SearchContainer>
-                        <Input placeholder="Search" />
-                        <Search style={{ color: "gray", fontSize: 16 }} />
-                    </SearchContainer>
-                </Left>
-                <Center>
-                    <Logo>Pink Fluffy Unicorns.</Logo>
-                </Center>
-                <Right>
-                    <MenuItem>REGISTER</MenuItem>
-                    <MenuItem>SIGN IN</MenuItem>
-                    <MenuItem>
-                        <Badge badgeContent={4} color="primary">
-                            <ShoppingCartOutlined />
-                        </Badge>
-                    </MenuItem>
-                </Right>
-            </Wrapper>
+          <Wrapper>
+              <Left>
+                  <Dropdown>
+                  <MenuIcon/>
+                  </Dropdown>
+                  <ClickLogo>
+                    <img src={logo} className="Logo" alt="logo"/>
+                  </ClickLogo>
+
+                  <LogoSpash>
+                    <Logo >Pink Fluffy Unicorns.</Logo>
+                  </LogoSpash>
+              </Left>
+              <Center>
+                 <SearchContainer>
+                    <Input/>
+                    <SearchIcon style ={{color:"gray",fontSize:"32px"}}/>
+                 </SearchContainer>
+              </Center>
+              <Right>
+                  <MenuItem>SIGN IN</MenuItem>
+                  <MenuItem>REGISTER</MenuItem>
+                  <MenuItem>
+                     <Badge badgeContent={quantity} color="primary">
+                        <ShoppingCartOutlined color="action" />
+                     </Badge>
+                  </MenuItem>
+                  <MenuItem>
+                     <Badge badgeContent={4} color="secondary">
+                        <MailIcon color="action" />
+                     </Badge>
+                  </MenuItem>
+              </Right>
+          </Wrapper>
         </Container>
     );
 };
