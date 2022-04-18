@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux"
 import Comments from "../components/Comments";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 const Container = styled.div``;
 
 const Wrapper = styled.div`
@@ -126,7 +127,7 @@ const Product = () => {
   const [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch()
-
+  let navigate = useNavigate();
   useEffect(() => {
     const getProducts = async () => {
       await axios(
@@ -150,7 +151,11 @@ const Product = () => {
   }
 
   const handleClick = () => {
-    dispatch(addProduct({ ...product, quantity }))
+    if (!user) {
+      navigate(`/login`);
+    } else {
+      dispatch(addProduct({ ...product, quantity }))
+    }
   }
 
   return (
@@ -178,7 +183,7 @@ const Product = () => {
               <Amount>{quantity}</Amount>
               <Add onClick={() => handleQuantity("inc")} />
             </AmountContainer>
-            <Button onClick={handleClick} disabled={!user}>ADD TO CART</Button>
+            <Button onClick={handleClick} >ADD TO CART</Button>
 
           </AddContainer>
           <Comments reviews={product.reviews} />
