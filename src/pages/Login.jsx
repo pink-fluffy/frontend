@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { cart, login } from '../redux/apiCalls';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
@@ -70,43 +71,43 @@ const Error = styled.span`
 const Login = () => {
 
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const dispatch = useDispatch();
-    const { isFetching, error } = useSelector((state) => state.user);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const { isFetching, error } = useSelector((state) => state.user);
 
-    const handleClick async = (e) => {
-        e.preventDefault();
-    await     login(dispatch, { email, password });
-    
+  const handleClick = async (e) => {
+    e.preventDefault();
+    await login(dispatch, { email, password });
+  };
 
-};
 
-    return (
 
-        <Container>
-            <Wrapper>
-                <Title>LOG IN</Title>
-                <Form>
-                    <Input type="email"  placeholder="email" onChange={(e) => setEmail(e.target.value)} />
-                    <Input placeholder="type="password" password" onChange={(e) => setPassword(e.target.value)} />
-                    <Button onClick={hansFetching}>LOG IN</Button>
-                    {error && <Error> Something went wrong... </Error>}
-                    <Link to="/register">
-                        <Links>
-                            CREATE A NEW ACCOUNT
-                        </Links>
-                    </Link>
-                    <Link to="/">
-                        <Links>
-                            HOME
-                        </Links>
-                    </Link>
+  return (
 
-                </Form>
-            </Wrapper>
-        </Container>
-    )
+    <Container>
+      <Wrapper>
+        <Title>LOG IN</Title>
+        <Form>
+          <Input placehold type="email" er="email" onChange={(e) => setEmail(e.target.value)} />
+          <Input placeholder="password" type="password" onChange={(e) => setPassword(e.target.value)} />
+          <Button onClick={handleClick} >LOG IN</Button>
+          {error && <Error> Something went wrong... </Error>}
+          <Link to="/register">
+            <Links>
+              CREATE A NEW ACCOUNT
+            </Links>
+          </Link>
+          <Link to="/">
+            <Links>
+              HOME
+            </Links>
+          </Link>
+
+        </Form>
+      </Wrapper>
+    </Container>
+  )
 }
 
 export default Login
