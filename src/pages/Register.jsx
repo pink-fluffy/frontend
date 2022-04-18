@@ -102,7 +102,7 @@ const Register = () => {
         e.preventDefault();
         validForm ? register(dispatch, { first_name: first_name, last_name: last_name, email, password }) : console.log("Invalid entry in forum values");
 
-        if (i === 1) {
+        if (i === 2) {
             toast.success(`Success: Registration successful`, {
                 theme: "colored",
                 position: "top-left",
