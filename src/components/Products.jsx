@@ -21,9 +21,11 @@ const Products = ({ cat, filters, sort }) => {
     useEffect(() => {
         const getProducts = async () => {
             await axios(
-                cat ? {
-                    url: `/product/?category=${cat}`, method: 'get', baseURL: 'https://api.shopunicorn.live', headers: { 'Authorization': 'Bearer fluffytestingunicorn' }
-                } : { url: `/product/getAll`, method: 'get', baseURL: 'https://api.shopunicorn.live', headers: { 'Authorization': 'Bearer fluffytestingunicorn' } }
+                cat === "all" ? {
+                    url: `/product/getAll`, method: 'get', baseURL: 'https://api.shopunicorn.live'
+                } : {
+                    url: `/product/?category=${cat}`, method: 'get', baseURL: 'https://api.shopunicorn.live'
+                }
             ).then(function (response) {
                 setProducts(response.data.data)
             }).catch(function (error) {

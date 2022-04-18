@@ -7,10 +7,11 @@ import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { publicRequest } from "../requestMethods";
 import axios from "axios";
-import { addProduct } from "../redux/cartRedux";
+import { addProduct, delProduct } from "../redux/cartRedux";
 import { useDispatch } from "react-redux"
 import Comments from "../components/Comments";
-
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 const Container = styled.div``;
 
 const Wrapper = styled.div`
@@ -112,71 +113,82 @@ const Button = styled.button`
   &:hover{
       background-color: #f8f4f4;
   }
+  &:disabled {
+    color: green;
+    cursor: not-allowed;
+  }
 `;
 
 const Product = () => {
-    const location = useLocation();
-    const id = location.pathname.split("/")[2];
-    const [product, setProduct] = useState({});
-    const [quantity, setQuantity] = useState(1);
-    const dispatch = useDispatch()
+  const user = useSelector(state => state.user.currentUser)
+  const location = useLocation();
+  const id = location.pathname.split("/")[2];
+  const [product, setProduct] = useState({});
+  const [quantity, setQuantity] = useState(1);
+  const dispatch = useDispatch()
 
-    useEffect(() => {
-        const getProducts = async () => {
-            await axios(
-                { url: `/product/${id}`, method: 'get', baseURL: 'https://api.shopunicorn.live', headers: { 'Authorization': 'Bearer fluffytestingunicorn' } }
-            ).then(function (response) {
-                setProduct(response.data.data)
-                console.log(response.data)
-            }).catch(function (error) {
-                console.log(error);
-            })
-        }
-        getProducts()
-    }, [id])
-
-    const handleQuantity = (type) => {
-        if (type === "dec") {
-            quantity > 1 && setQuantity(quantity - 1)
-        } else {
-            setQuantity(quantity + 1)
-        }
+  useEffect(() => {
+    const getProducts = async () => {
+      await axios(
+        { url: `/product/${id}`, method: 'get', baseURL: 'https://api.shopunicorn.live', headers: { 'Authorization': 'Bearer fluffytestingunicorn' } }
+      ).then(function (response) {
+        setProduct(response.data.data)
+        console.log(response.data)
+      }).catch(function (error) {
+        console.log(error);
+      })
     }
+    getProducts()
+  }, [id])
 
-    const handleClick = () => {
-        dispatch(addProduct({ product, quantity }))
-
+  const handleQuantity = (type) => {
+    if (type === "dec") {
+      quantity > 1 && setQuantity(quantity - 1)
+    } else {
+      setQuantity(quantity + 1)
     }
+  }
 
-    return (
-        <Container>
-            <Navbar />
-            <Announcement />
-            <Wrapper>
-                <ImgContainer>
-                    <Image src="https://i.ibb.co/S6qMxwr/jean.jpg" />
-                </ImgContainer>
-                <InfoContainer>
-                    <Title>{product.name}</Title>
-                    <Desc>
-                        {product.description}
-                    </Desc>
-                    <Price>${product.price}</Price>
+  const handleClick = () => {
+    dispatch(addProduct({ ...product, quantity }))
+  }
 
-                    <AddContainer>
-                        <AmountContainer>
-                            <Remove onClick={() => handleQuantity("dec")} />
-                            <Amount>{quantity}</Amount>
-                            <Add onClick={() => handleQuantity("inc")} />
-                        </AmountContainer>
-                        <Button onClick={handleClick}>ADD TO CART</Button>
-                    </AddContainer>
-                    <Comments/>
-                </InfoContainer>
-            </Wrapper>
-            <Footer />
-        </Container>
-    );
+  return (
+    <Container>
+      <Navbar />
+      <Announcement />
+      <Wrapper>
+        <ImgContainer>
+          <Image src={product.image} />
+          <Link to='/products/all'>
+            <Button >CONTINUE SHOPPING</Button>
+          </Link>
+        </ImgContainer>
+        <InfoContainer>
+
+          <Title>{product.name}</Title>
+          <Desc>
+            {product.description}
+          </Desc>
+          <Price>${product.price}</Price>
+
+          <AddContainer>
+            <AmountContainer>
+              <Remove onClick={() => handleQuantity("dec")} />
+              <Amount>{quantity}</Amount>
+              <Add onClick={() => handleQuantity("inc")} />
+            </AmountContainer>
+            <Button onClick={handleClick} disabled={!user}>ADD TO CART</Button>
+
+          </AddContainer>
+          <Comments reviews={product.reviews} />
+
+        </InfoContainer>
+
+      </Wrapper>
+      <Footer />
+    </Container>
+  );
 };
 
 export default Product;

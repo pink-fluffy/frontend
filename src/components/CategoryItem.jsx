@@ -1,9 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom';
+
+
 const Container = styled.div`
     flex: 1;
-    margin: 3px;
+    margin: 10px;
     height: 70vh;
     position: relative;
 `
@@ -49,8 +51,6 @@ const CategoryItem = ({ item }) => {
                     <Button>SHOP NOW</Button>
                 </Info>
             </Link>
-
-
         </Container>
     )
 }

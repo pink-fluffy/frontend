@@ -1,6 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
-
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { cart, login } from '../redux/apiCalls';
+import { Link } from 'react-router-dom';
+import Navbar from '../components/Navbar';
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
@@ -48,26 +52,57 @@ const Button = styled.button`
   color: white;
   cursor: pointer;
   margin-bottom: 10px;
+  &:disabled{
+      color: green;
+      cursor: not-allowed;
+  }
 `;
 
-const Link = styled.a`
+const Links = styled.a`
   margin: 5px 0px;
   font-size: 12px;
   text-decoration: underline;
   cursor: pointer;
 `;
-
+const Error = styled.span`
+    color: red;
+`
 const Login = () => {
+
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const dispatch = useDispatch();
+    const { isFetching, error } = useSelector((state) => state.user);
+
+    const handleClick async = (e) => {
+        e.preventDefault();
+    await     login(dispatch, { email, password });
+    
+
+};
+
     return (
+
         <Container>
             <Wrapper>
                 <Title>LOG IN</Title>
                 <Form>
-                    <Input placeholder="username" />
-                    <Input placeholder="password" />
-                    <Button>LOG IN</Button>
-                    <Link>FORGOT YOUR PASSWORD?</Link>
-                    <Link>CREATE A NEW ACCOUNT</Link>
+                    <Input type="email"  placeholder="email" onChange={(e) => setEmail(e.target.value)} />
+                    <Input placeholder="type="password" password" onChange={(e) => setPassword(e.target.value)} />
+                    <Button onClick={hansFetching}>LOG IN</Button>
+                    {error && <Error> Something went wrong... </Error>}
+                    <Link to="/register">
+                        <Links>
+                            CREATE A NEW ACCOUNT
+                        </Links>
+                    </Link>
+                    <Link to="/">
+                        <Links>
+                            HOME
+                        </Links>
+                    </Link>
+
                 </Form>
             </Wrapper>
         </Container>

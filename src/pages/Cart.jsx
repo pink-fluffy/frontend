@@ -1,14 +1,34 @@
 import { Add, Remove } from "@material-ui/icons";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import StripeCheckout from "react-stripe-checkout";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { DeleteOutline } from "@material-ui/icons";
+import { useDispatch } from "react-redux"
+import { addProduct, decQuantity, delProduct, incQuantity, productDec, productInc } from "../redux/cartRedux";
+const KEY = process.env.REACT_APP_STRIPE
 
 const Container = styled.div``;
 
 const Wrapper = styled.div`
   padding: 20px;
 `;
+
+const Icon = styled.div`
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+    cursor: pointer;
+  `;
 
 const Title = styled.h1`
   font-weight: 300;
@@ -28,7 +48,7 @@ const TopButton = styled.button`
   cursor: pointer;
   border: ${(props) => props.type === "filled" && "none"};
   background-color: ${(props) =>
-        props.type === "filled" ? "black" : "transparent"};
+    props.type === "filled" ? "black" : "transparent"};
   color: ${(props) => props.type === "filled" && "white"};
 `;
 
@@ -143,102 +163,139 @@ const Button = styled.button`
   background-color: black;
   color: white;
   font-weight: 600;
+  cursor: pointer;
 `;
 
 const Cart = () => {
-    return (
-        <Container>
-            <Navbar />
-            <Announcement />
-            <Wrapper>
-                <Title>YOUR BAG</Title>
-                <Top>
-                    <TopButton>CONTINUE SHOPPING</TopButton>
-                    <TopTexts>
-                        <TopText>Shopping Bag(2)</TopText>
-                        <TopText>Your Wishlist (0)</TopText>
-                    </TopTexts>
-                    <TopButton type="filled">CHECKOUT NOW</TopButton>
-                </Top>
-                <Bottom>
-                    <Info>
-                        <Product>
-                            <ProductDetail>
-                                <Image src="https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1614188818-TD1MTHU_SHOE_ANGLE_GLOBAL_MENS_TREE_DASHERS_THUNDER_b01b1013-cd8d-48e7-bed9-52db26515dc4.png?crop=1xw:1.00xh;center,top&resize=480%3A%2A" />
-                                <Details>
-                                    <ProductName>
-                                        <b>Product:</b> JESSIE THUNDER SHOES
-                                    </ProductName>
-                                    <ProductId>
-                                        <b>ID:</b> 93813718293
-                                    </ProductId>
-                                    <ProductColor color="black" />
-                                    <ProductSize>
-                                        <b>Size:</b> 37.5
-                                    </ProductSize>
-                                </Details>
-                            </ProductDetail>
-                            <PriceDetail>
-                                <ProductAmountContainer>
-                                    <Add />
-                                    <ProductAmount>2</ProductAmount>
-                                    <Remove />
-                                </ProductAmountContainer>
-                                <ProductPrice>$ 30</ProductPrice>
-                            </PriceDetail>
-                        </Product>
-                        <Hr />
-                        <Product>
-                            <ProductDetail>
-                                <Image src="https://i.pinimg.com/originals/2d/af/f8/2daff8e0823e51dd752704a47d5b795c.png" />
-                                <Details>
-                                    <ProductName>
-                                        <b>Product:</b> HAKURA T-SHIRT
-                                    </ProductName>
-                                    <ProductId>
-                                        <b>ID:</b> 93813718293
-                                    </ProductId>
-                                    <ProductColor color="gray" />
-                                    <ProductSize>
-                                        <b>Size:</b> M
-                                    </ProductSize>
-                                </Details>
-                            </ProductDetail>
-                            <PriceDetail>
-                                <ProductAmountContainer>
-                                    <Add />
-                                    <ProductAmount>1</ProductAmount>
-                                    <Remove />
-                                </ProductAmountContainer>
-                                <ProductPrice>$ 20</ProductPrice>
-                            </PriceDetail>
-                        </Product>
-                    </Info>
-                    <Summary>
-                        <SummaryTitle>ORDER SUMMARY</SummaryTitle>
-                        <SummaryItem>
-                            <SummaryItemText>Subtotal</SummaryItemText>
-                            <SummaryItemPrice>$ 80</SummaryItemPrice>
-                        </SummaryItem>
-                        <SummaryItem>
-                            <SummaryItemText>Estimated Shipping</SummaryItemText>
-                            <SummaryItemPrice>$ 5.90</SummaryItemPrice>
-                        </SummaryItem>
-                        <SummaryItem>
-                            <SummaryItemText>Shipping Discount</SummaryItemText>
-                            <SummaryItemPrice>$ -5.90</SummaryItemPrice>
-                        </SummaryItem>
-                        <SummaryItem type="total">
-                            <SummaryItemText>Total</SummaryItemText>
-                            <SummaryItemPrice>$ 80</SummaryItemPrice>
-                        </SummaryItem>
-                        <Button>CHECKOUT NOW</Button>
-                    </Summary>
-                </Bottom>
-            </Wrapper>
-            <Footer />
-        </Container>
-    );
+  const cart = useSelector(state => state.cart)
+  const quantity = useSelector(state => state.cart.quantity)
+  const [stripeToken, setStripeToken] = useState(null)
+  const [prodQuantity, setQuantity] = useState(1);
+  const dispatch = useDispatch()
+  const handleQuantity = (type, quant) => {
+    if (type === "dec") {
+      quant > 1 && setQuantity(quant - 1)
+    } else {
+      setQuantity(quant + 1)
+    }
+  }
+
+  const onToken = (token) => {
+    setStripeToken(token)
+  }
+
+  const handleRemoveFromCart = (cartItem) => {
+    dispatch(delProduct(cartItem))
+  }
+
+  const handleChangeQuantity = (cartItem, type) => {
+    if (type === "dec" && cartItem.quantity > 1) {
+      dispatch(productDec(cartItem, type))
+    } else if (type === "inc") {
+      dispatch(productInc(cartItem, type))
+    }
+
+
+
+  }
+
+
+  /*ADD A USE EFFECT FOR STRIPE API CALL*/
+
+  return (
+    <Container>
+      <Navbar />
+      <Announcement />
+      <Wrapper>
+        <Title>YOUR BAG</Title>
+        <Top>
+          <Link to="/products/all">
+            <TopButton>CONTINUE SHOPPING</TopButton>
+          </Link>
+          <TopTexts>
+            <TopText>Shopping Bag ({quantity})</TopText>
+          </TopTexts>
+          <StripeCheckout
+            name="Unicorns.Shop"
+            image="https://avatars.githubusercontent.com/u/101955212?s=200&v=4"
+            billingAddress
+            shippingAddress
+            description={`Your total is $${cart.total}`}
+            amount={cart.total * 100}
+            token={onToken}
+            stripeKey={KEY}
+          >
+            <TopButton type="filled" disabled={quantity === 0}>CHECKOUT NOW</TopButton>
+          </StripeCheckout>
+        </Top>
+        <Bottom>
+          <Info>
+            {cart.products.map(product => (
+              <Product>
+                <ProductDetail>
+                  <Image src={product.image} />
+                  <Details>
+                    <ProductName>
+                      <b></b> {product.name}
+                    </ProductName>
+                    <ProductId>
+                      <b>ID:</b> {product.short_id}
+                    </ProductId>
+                    <Icon>
+                      <DeleteOutline onClick={() => handleRemoveFromCart(product)} />
+                    </Icon>
+                  </Details>
+                </ProductDetail>
+                <PriceDetail>
+                  <ProductAmountContainer>
+                    <Remove onClick={() => handleChangeQuantity(product, "dec")} />
+                    <ProductAmount>{product.quantity}</ProductAmount>
+                    <Add onClick={() => { handleChangeQuantity(product, "inc") }} />
+                  </ProductAmountContainer>
+                  <ProductPrice>$ {Math.round((product.price * product.quantity * 100)) / 100}</ProductPrice>
+
+                </PriceDetail>
+              </Product>
+            ))}
+            < Hr />
+          </Info>
+          <Summary>
+            <SummaryTitle>ORDER SUMMARY</SummaryTitle>
+            <SummaryItem>
+              <SummaryItemText>Subtotal</SummaryItemText>
+              <SummaryItemPrice>$ {Math.round((cart.total * 100)) / 100}</SummaryItemPrice>
+            </SummaryItem>
+            <SummaryItem>
+              <SummaryItemText>Estimated Shipping</SummaryItemText>
+              <SummaryItemPrice>{quantity === 0 ? "$ 0" : "$ 5.90"}</SummaryItemPrice>
+            </SummaryItem>
+            <SummaryItem>
+              <SummaryItemText>Shipping Discount</SummaryItemText>
+              <SummaryItemPrice>{quantity === 0 ? "$ 0" : "$ -5.90"}</SummaryItemPrice>
+            </SummaryItem>
+            <SummaryItem type="total">
+              <SummaryItemText>Total</SummaryItemText>
+              <SummaryItemPrice>$ {Math.round((cart.total * 100)) / 100}</SummaryItemPrice>
+            </SummaryItem>
+            <StripeCheckout
+              name="Unicorns.Shop"
+              image="https://avatars.githubusercontent.com/u/101955212?s=200&v=4"
+              billingAddress
+              shippingAddress
+              description={`Your total is $${cart.total}`}
+              amount={cart.total * 100}
+              token={onToken}
+              stripeKey={KEY}
+            >
+
+              <Button disabled={quantity === 0}>CHECKOUT NOW</Button>
+            </StripeCheckout>
+          </Summary>
+        </Bottom>
+      </Wrapper>
+      <Footer />
+    </Container >
+  );
 };
 
 export default Cart;

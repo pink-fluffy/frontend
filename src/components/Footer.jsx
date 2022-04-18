@@ -5,11 +5,11 @@ import {
     Phone,
     Pinterest,
     Room,
-    Twitter
+    Twitter,
 } from '@material-ui/icons'
 import React from 'react'
 import styled from 'styled-components'
-
+import { Link } from 'react-router-dom';
 const Container = styled.div`
   display: flex;
 `;
@@ -61,8 +61,9 @@ const List = styled.ul`
 `;
 
 const ListItem = styled.li`
-  width: 50%;
+  width: 300px;
   margin-bottom: 10px;
+
 `;
 
 const Right = styled.div`
@@ -84,46 +85,47 @@ const Footer = () => {
     return (
         <Container>
             <Left>
-                <Logo>LAMA.</Logo>
+                <Logo>Unicorn.shop</Logo>
                 <Desc>
-                    There are many variations of passages of Lorem Ipsum available, but
-                    the majority have suffered alteration in some form, by injected
-                    humour, or randomised words which don’t look even slightly believable.
+                    Your favourite convenience store with the best selling items in
+                    the world today! Developed and curated by Alborz, Siddarth, Ben &
+                    Orion.
                 </Desc>
                 <SocialContainer>
-                    <SocialIcon color="3B5999">
-                        <Facebook />
-                    </SocialIcon>
-                    <SocialIcon color="E4405F">
-                        <Instagram />
+                    <SocialIcon>
+                        <Link to={{ pathname: "https://wiki.sidharth.me/eecs4413" }}>
+                            <Facebook />
+                        </Link>
                     </SocialIcon>
                 </SocialContainer>
             </Left>
             <Center>
                 <Title>Useful Links</Title>
                 <List>
-                    <ListItem>Home</ListItem>
-                    <ListItem>Cart</ListItem>
-                    <ListItem>Man Fashion</ListItem>
-                    <ListItem>Woman Fashion</ListItem>
-                    <ListItem>Accessories</ListItem>
-                    <ListItem>My Account</ListItem>
-                    <ListItem>Order Tracking</ListItem>
-                    <ListItem>Wishlist</ListItem>
-                    <ListItem>Wishlist</ListItem>
-                    <ListItem>Terms</ListItem>
+                    <Link to='/' style={{ textDecoration: 'none' }}>
+                        <ListItem>Home</ListItem>
+                    </Link>
+                    <Link to='/cart' style={{ textDecoration: 'none' }}>
+                        <ListItem>Cart</ListItem>
+                    </Link>
+                    <Link to='/products/all' style={{ textDecoration: 'none' }}>
+                        <ListItem>Shop All</ListItem>
+                    </Link>
+                    <Link to='/login' style={{ textDecoration: 'none' }}>
+                        <ListItem>Log In</ListItem>
+                    </Link>
+                    <Link to='/register' style={{ textDecoration: 'none' }}>
+                        <ListItem>Register</ListItem>
+                    </Link>
                 </List>
             </Center>
             <Right>
                 <Title>Contact</Title>
                 <ContactItem>
-                    <Room style={{ marginRight: "10px" }} /> 622 Dixie Path , South Tobinchester 98336
+                    <Room style={{ marginRight: "10px" }} /> York University, Lassonde School of Engineering
                 </ContactItem>
                 <ContactItem>
-                    <Phone style={{ marginRight: "10px" }} /> +1 234 56 78
-                </ContactItem>
-                <ContactItem>
-                    <MailOutline style={{ marginRight: "10px" }} /> contact@lama.dev
+                    <MailOutline style={{ marginRight: "10px" }} /> alborz@my.yorku.ca
                 </ContactItem>
                 <Payment src="https://i.ibb.co/Qfvn4z6/payment.png" />
             </Right>

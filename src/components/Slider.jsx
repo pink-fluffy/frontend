@@ -1,11 +1,11 @@
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@material-ui/icons";
 import { useState } from "react";
 import styled from "styled-components";
-import { sliderItems } from "../data";
-
+import { categories, sliderItems } from "../data";
+import { Link } from "react-router-dom";
 const Container = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 80vh;
   display: flex;
   position: relative;
   overflow: hidden;
@@ -39,7 +39,7 @@ const Wrapper = styled.div`
 
 const Slide = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: 80vh;
   display: flex;
   align-items: center;
   background-color: #${(props) => props.bg};
@@ -81,9 +81,9 @@ const Slider = () => {
     const [slideIndex, setSlideIndex] = useState(0);
     const handleClick = (direction) => {
         if (direction === "left") {
-            setSlideIndex(slideIndex > 0 ? slideIndex - 1 : 2);
+            setSlideIndex(slideIndex > 0 ? slideIndex - 1 : 8);
         } else {
-            setSlideIndex(slideIndex < 2 ? slideIndex + 1 : 0);
+            setSlideIndex(slideIndex < 8 ? slideIndex + 1 : 0);
         }
     };
 
@@ -93,7 +93,7 @@ const Slider = () => {
                 <ArrowLeftOutlined />
             </Arrow>
             <Wrapper slideIndex={slideIndex}>
-                {sliderItems.map((item) => (
+                {categories.map((item) => (
                     <Slide bg={item.bg} key={item.id}>
                         <ImgContainer>
                             <Image src={item.img} />
@@ -101,7 +101,9 @@ const Slider = () => {
                         <InfoContainer>
                             <Title>{item.title}</Title>
                             <Desc>{item.desc}</Desc>
-                            <Button>SHOW NOW</Button>
+                            <Link to={item.cat}>
+                                <Button>SHOP NOW</Button>
+                            </Link>
                         </InfoContainer>
                     </Slide>
                 ))}

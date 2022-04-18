@@ -13,9 +13,8 @@ const Announcement = () => {
     return (
         <div>
             <Container>
-                Annoucement
+                Free Shipping on all tiems from April 17th until May 31st!
             </Container>
-
         </div>
     )
 }
