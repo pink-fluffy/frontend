@@ -5,11 +5,12 @@ import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import StripeCheckout from "react-stripe-checkout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { DeleteOutline } from "@material-ui/icons";
 import { useDispatch } from "react-redux"
 import { addProduct, decQuantity, delProduct, incQuantity, productDec, productInc } from "../redux/cartRedux";
+import { useNavigate } from "react-router-dom";
 const KEY = process.env.REACT_APP_STRIPE
 
 const Container = styled.div``;
@@ -179,10 +180,17 @@ const Cart = () => {
       setQuantity(quant + 1)
     }
   }
+  let navigate = useNavigate()
+
 
   const onToken = (token) => {
     setStripeToken(token)
+    if (token) {
+      navigate('/orderconfirmation')
+    }
+
   }
+
 
   const handleRemoveFromCart = (cartItem) => {
     dispatch(delProduct(cartItem))
@@ -198,6 +206,7 @@ const Cart = () => {
 
 
   }
+
 
 
   /*ADD A USE EFFECT FOR STRIPE API CALL*/
